@@ -103,7 +103,7 @@ public struct WhitespaceBehaviour: Equatable, Sendable {
   public static let unspecified = WhitespaceBehaviour(leading: .unspecified, trailing: .unspecified)
 }
 
-public final class Token: Equatable, Sendable {
+public final class Token: Equatable, @unchecked Sendable {
   public enum Kind: Equatable, Sendable {
     /// A token representing a piece of text.
     case text
