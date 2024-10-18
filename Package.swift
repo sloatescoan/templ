@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:6.0
 import PackageDescription
 
 let package = Package(
@@ -11,9 +11,15 @@ let package = Package(
     .package(url: "https://github.com/kylef/Spectre.git", from: "0.10.1")
   ],
   targets: [
-    .target(name: "Stencil", dependencies: [
-      "PathKit"
-    ]),
+    .target(
+      name: "Stencil",
+      dependencies: [
+        "PathKit"
+      ],
+      swiftSettings: [
+        .enableUpcomingFeature("StrictConcurrency")
+      ]
+    ),
     .testTarget(name: "StencilTests", dependencies: [
       "Stencil",
       "Spectre"

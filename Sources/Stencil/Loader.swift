@@ -5,10 +5,10 @@
 //
 
 import Foundation
-import PathKit
+@preconcurrency import PathKit
 
 /// Type used for loading a template
-public protocol Loader {
+public protocol Loader: Sendable {
   /// Load a template with the given name
   func loadTemplate(name: String, environment: Environment) throws -> Template
   /// Load a template with the given list of names
@@ -33,7 +33,7 @@ extension Loader {
 }
 
 // A class for loading a template from disk
-public class FileSystemLoader: Loader, CustomStringConvertible {
+public final class FileSystemLoader: Loader, CustomStringConvertible {
   public let paths: [Path]
 
   public init(paths: [Path]) {
@@ -81,7 +81,7 @@ public class FileSystemLoader: Loader, CustomStringConvertible {
   }
 }
 
-public class DictionaryLoader: Loader {
+public final class DictionaryLoader: Loader {
   public let templates: [String: String]
 
   public init(templates: [String: String]) {
@@ -119,7 +119,7 @@ extension Path {
   }
 }
 
-class SuspiciousFileOperation: Error {
+final class SuspiciousFileOperation: Error {
   let basePath: Path
   let path: Path
 

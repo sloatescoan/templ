@@ -74,7 +74,7 @@ extension String {
   }
 }
 
-public struct SourceMap: Equatable {
+public struct SourceMap: Equatable, Sendable {
   public let filename: String?
   public let location: ContentLocation
 
@@ -90,8 +90,8 @@ public struct SourceMap: Equatable {
   }
 }
 
-public struct WhitespaceBehaviour: Equatable {
-  public enum Behaviour {
+public struct WhitespaceBehaviour: Equatable, Sendable {
+  public enum Behaviour: Sendable {
     case unspecified
     case trim
     case keep
@@ -103,8 +103,8 @@ public struct WhitespaceBehaviour: Equatable {
   public static let unspecified = WhitespaceBehaviour(leading: .unspecified, trailing: .unspecified)
 }
 
-public class Token: Equatable {
-  public enum Kind: Equatable {
+public final class Token: Equatable, Sendable {
+  public enum Kind: Equatable, Sendable {
     /// A token representing a piece of text.
     case text
     /// A token representing a variable.
@@ -118,7 +118,7 @@ public class Token: Equatable {
   public let contents: String
   public let kind: Kind
   public let sourceMap: SourceMap
-  public var whitespace: WhitespaceBehaviour?
+  public let whitespace: WhitespaceBehaviour?
 
   /// Returns the underlying value as an array seperated by spaces
   public private(set) lazy var components: [String] = self.contents.smartSplit()

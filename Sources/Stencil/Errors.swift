@@ -4,7 +4,7 @@
 // MIT Licence
 //
 
-public class TemplateDoesNotExist: Error, CustomStringConvertible {
+public final class TemplateDoesNotExist: Error, CustomStringConvertible {
   let templateNames: [String]
   let loader: Loader?
 

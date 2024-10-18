@@ -6,11 +6,11 @@
 
 import Foundation
 
-public struct TrimBehaviour: Equatable {
+public struct TrimBehaviour: Equatable, Sendable {
   var leading: Trim
   var trailing: Trim
 
-  public enum Trim {
+  public enum Trim: Sendable {
     /// nothing
     case nothing
 
