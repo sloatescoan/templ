@@ -15,9 +15,6 @@ let package = Package(
       name: "Stencil",
       dependencies: [
         "PathKit"
-      ],
-      swiftSettings: [
-        .enableUpcomingFeature("StrictConcurrency")
       ]
     ),
     .testTarget(name: "StencilTests", dependencies: [
@@ -25,5 +22,5 @@ let package = Package(
       "Spectre"
     ])
   ],
-  swiftLanguageVersions: [.v5]
+  swiftLanguageModes: [.v6]
 )
