@@ -11,7 +11,7 @@ import XCTest
 final class ExpressionsTests: XCTestCase {
   private let parser = TokenParser(tokens: [], environment: Environment())
 
-  private func makeExpression(_ components: [String]) -> Expression {
+  private func makeExpression(_ components: [String]) -> Stencil.Expression {
     do {
       let parser = try IfExpressionParser.parser(
         components: components,
