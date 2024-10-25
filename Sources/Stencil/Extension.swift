@@ -5,6 +5,7 @@
 //
 
 /// Container for registered tags and filters
+@preconcurrency
 open class Extension {
   typealias TagParser = (TokenParser, Token) throws -> NodeType
 
