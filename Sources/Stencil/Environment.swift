@@ -5,15 +5,15 @@
 //
 
 /// Container for environment data, such as registered extensions
-public struct Environment {
+public struct Environment: Sendable {
   /// The class for loading new templates
   public let templateClass: Template.Type
   /// List of registered extensions
-  public var extensions: [Extension]
+  public let extensions: [Extension]
   /// How to handle whitespace
-  public var trimBehaviour: TrimBehaviour
+  public let trimBehaviour: TrimBehaviour
   /// Mechanism for loading new files
-  public var loader: Loader?
+  public let loader: Loader?
 
   /// Basic initializer
   ///
