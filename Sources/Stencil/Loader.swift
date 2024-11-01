@@ -35,8 +35,10 @@ extension Loader {
 public final class FileSystemLoader: Loader, CustomStringConvertible {
   public let paths: [URL]
 
-  public init(paths: [URL]) {
-    self.paths = paths
+  public init(paths: [String]) {
+    self.paths = paths.map {
+      URL(fileURLWithPath: $0)
+    }
   }
 
   public init(bundle: [Bundle]) {
