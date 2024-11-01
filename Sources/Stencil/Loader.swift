@@ -5,7 +5,6 @@
 //
 
 import Foundation
-@preconcurrency import PathKit
 
 /// Type used for loading a template
 public protocol Loader: Sendable {
@@ -34,15 +33,15 @@ extension Loader {
 
 // A class for loading a template from disk
 public final class FileSystemLoader: Loader, CustomStringConvertible {
-  public let paths: [Path]
+  public let paths: [URL]
 
-  public init(paths: [Path]) {
+  public init(paths: [URL]) {
     self.paths = paths
   }
 
   public init(bundle: [Bundle]) {
     self.paths = bundle.map { bundle in
-      Path(bundle.bundlePath)
+      bundle.bundleURL
     }
   }
 
@@ -52,13 +51,13 @@ public final class FileSystemLoader: Loader, CustomStringConvertible {
 
   public func loadTemplate(name: String, environment: Environment) throws -> Template {
     for path in paths {
-      let templatePath = try path.safeJoin(path: Path(name))
+      let templatePath = path.appending(component: name)
 
-      if !templatePath.exists {
+      if try !templatePath.checkResourceIsReachable() {
         continue
       }
 
-      let content: String = try templatePath.read()
+      let content = try String(contentsOf: templatePath, encoding: .utf8)
       return environment.templateClass.init(templateString: content, environment: environment, name: name)
     }
 
@@ -68,10 +67,10 @@ public final class FileSystemLoader: Loader, CustomStringConvertible {
   public func loadTemplate(names: [String], environment: Environment) throws -> Template {
     for path in paths {
       for templateName in names {
-        let templatePath = try path.safeJoin(path: Path(templateName))
+        let templatePath = path.appending(component: templateName)
 
-        if templatePath.exists {
-          let content: String = try templatePath.read()
+        if try templatePath.checkResourceIsReachable() {
+          let content: String = try String(contentsOf: templatePath, encoding: .utf8)
           return environment.templateClass.init(templateString: content, environment: environment, name: templateName)
         }
       }
@@ -104,31 +103,5 @@ public final class DictionaryLoader: Loader {
     }
 
     throw TemplateDoesNotExist(templateNames: names, loader: self)
-  }
-}
-
-extension Path {
-  func safeJoin(path: Path) throws -> Path {
-    let newPath = self + path
-
-    if !newPath.absolute().description.hasPrefix(absolute().description) {
-      throw SuspiciousFileOperation(basePath: self, path: newPath)
-    }
-
-    return newPath
-  }
-}
-
-final class SuspiciousFileOperation: Error {
-  let basePath: Path
-  let path: Path
-
-  init(basePath: Path, path: Path) {
-    self.basePath = basePath
-    self.path = path
-  }
-
-  var description: String {
-    "Path `\(path)` is located outside of base path `\(basePath)`"
   }
 }

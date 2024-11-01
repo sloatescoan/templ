@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
   name: "Stencil",
+  platforms: [.macOS(.v13)],
   products: [
     .library(name: "Stencil", targets: ["Stencil"])
   ],
@@ -12,10 +13,7 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "Stencil",
-      dependencies: [
-        "PathKit"
-      ]
+      name: "Stencil"
     ),
     .testTarget(name: "StencilTests", dependencies: [
       "Stencil",
