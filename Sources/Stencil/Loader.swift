@@ -53,7 +53,7 @@ public final class FileSystemLoader: Loader, CustomStringConvertible {
 
   public func loadTemplate(name: String, environment: Environment) throws -> Template {
     for path in paths {
-      let templatePath = path.appending(path: name)
+      let templatePath = path.appending(component: name)
 
       if try !templatePath.checkResourceIsReachable() {
         continue
@@ -69,7 +69,7 @@ public final class FileSystemLoader: Loader, CustomStringConvertible {
   public func loadTemplate(names: [String], environment: Environment) throws -> Template {
     for path in paths {
       for templateName in names {
-        let templatePath = path.appending(path: templateName)
+        let templatePath = path.appending(component: templateName)
 
         if try templatePath.checkResourceIsReachable() {
           let content: String = try String(contentsOf: templatePath, encoding: .utf8)
