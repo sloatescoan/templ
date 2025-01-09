@@ -8,7 +8,15 @@ import Foundation
 
 typealias Line = (content: String, number: UInt, range: Range<String.Index>)
 
-struct Lexer {
+struct Lexer: Hashable {
+  static func == (lhs: Lexer, rhs: Lexer) -> Bool {
+      lhs.templateString == rhs.templateString
+  }
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(templateString)
+  }
+
   let templateName: String?
   let templateString: String
   let lines: [Line]

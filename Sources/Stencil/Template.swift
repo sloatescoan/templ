@@ -29,7 +29,7 @@ open class Template: ExpressibleByStringLiteral {
     self.templateString = templateString
 
     let lexer = Lexer(templateName: name, templateString: templateString)
-    tokens = lexer.tokenize()
+    tokens = tokenize(lexer)
   }
 
   // MARK: ExpressibleByStringLiteral
@@ -62,4 +62,9 @@ open class Template: ExpressibleByStringLiteral {
   open func render(_ dictionary: [String: Any]? = nil) throws -> String {
     try render(Context(dictionary: dictionary ?? [:], environment: environment))
   }
+}
+
+@MainActor
+let tokenize = memoize { (lexer: Lexer) in
+  lexer.tokenize()
 }
