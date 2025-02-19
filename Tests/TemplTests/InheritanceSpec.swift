@@ -4,13 +4,12 @@
 // MIT Licence
 //
 
-import PathKit
 import Spectre
 import Templ
 import XCTest
 
 final class InheritanceTests: XCTestCase {
-  private let path = Path(#file as String) + ".." + "fixtures"
+  private let path = (#file as String) + ".." + "fixtures"
   private lazy var loader = FileSystemLoader(paths: [path])
   private lazy var environment = Environment(loader: loader)
 

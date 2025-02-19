@@ -4,7 +4,6 @@
 // MIT Licence
 //
 
-import PathKit
 import Spectre
 @testable import Templ
 import XCTest
@@ -17,7 +16,7 @@ final class EnvironmentBaseAndChildTemplateTests: XCTestCase {
   override func setUp() {
     super.setUp()
 
-    let path = Path(#file as String) + ".." + "fixtures"
+    let path = (#file as String) + ".." + "fixtures"
     let loader = FileSystemLoader(paths: [path])
     environment = Environment(loader: loader)
     childTemplate = ""
@@ -44,7 +43,8 @@ final class EnvironmentBaseAndChildTemplateTests: XCTestCase {
     filterExtension.registerFilter("unknown") {  (_: Any?) in
       throw TemplateSyntaxError("filter error")
     }
-    environment.extensions += [filterExtension]
+
+    let environment = Environment(loader: environment.loader, extensions: [filterExtension])
 
     childTemplate = try environment.loadTemplate(name: "invalid-child-super.html")
     baseTemplate = try environment.loadTemplate(name: "invalid-base.html")
@@ -78,7 +78,8 @@ final class EnvironmentBaseAndChildTemplateTests: XCTestCase {
     filterExtension.registerFilter("unknown") {  (_: Any?) in
       throw TemplateSyntaxError("filter error")
     }
-    environment.extensions += [filterExtension]
+
+    let environment = Environment(loader: environment.loader, extensions: [filterExtension])
 
     childTemplate = Template(
       templateString: """

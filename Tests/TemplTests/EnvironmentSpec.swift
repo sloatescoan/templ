@@ -4,7 +4,6 @@
 // MIT Licence
 //
 
-import PathKit
 import Spectre
 @testable import Templ
 import XCTest
@@ -27,8 +26,7 @@ final class EnvironmentTests: XCTestCase {
       ErrorNode(token: token)
     }
 
-    environment = Environment(loader: ExampleLoader())
-    environment.extensions += [errorExtension]
+    environment = Environment(loader: ExampleLoader(), extensions: [errorExtension])
     template = ""
   }
 

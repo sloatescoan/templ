@@ -4,7 +4,6 @@
 // MIT Licence
 //
 
-import PathKit
 import Spectre
 @testable import Templ
 import XCTest
@@ -18,7 +17,7 @@ final class EnvironmentIncludeTemplateTests: XCTestCase {
     super.setUp()
 
     let path = URL(fileURLWithPath: #file).appending(components: "../fixtures")
-    let loader = FileSystemLoader(paths: [path])
+    let loader = FileSystemLoader(paths: [path.path])
     environment = Environment(loader: loader)
     template = ""
     includedTemplate = ""
@@ -46,7 +45,8 @@ final class EnvironmentIncludeTemplateTests: XCTestCase {
     filterExtension.registerFilter("unknown") {  (_: Any?) in
       throw TemplateSyntaxError("filter error")
     }
-    environment.extensions += [filterExtension]
+
+    let environment = Environment(loader: environment.loader, extensions: [filterExtension])
 
     template = Template(templateString: """
       {% include "invalid-include.html" %}

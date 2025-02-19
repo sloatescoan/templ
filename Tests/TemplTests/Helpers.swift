@@ -4,14 +4,13 @@
 // MIT Licence
 //
 
-import PathKit
 import Spectre
 @testable import Templ
 import XCTest
 
 extension Expectation {
   @discardableResult
-  func toThrow<T: Error>() throws -> T {
+  func toThrow<U: Error>() throws -> U {
     var thrownError: Error?
 
     do {
@@ -21,10 +20,10 @@ extension Expectation {
     }
 
     if let thrownError = thrownError {
-      if let thrownError = thrownError as? T {
+      if let thrownError = thrownError as? U {
         return thrownError
       } else {
-        throw failure("\(thrownError) is not \(T.self)")
+        throw failure("\(thrownError) is not \(U.self)")
       }
     } else {
       throw failure("expression did not throw an error")
@@ -47,7 +46,7 @@ extension XCTestCase {
 
 // MARK: - Test Types
 
-class ExampleLoader: Loader {
+final class ExampleLoader: Loader {
   func loadTemplate(name: String, environment: Environment) throws -> Template {
     if name == "example.html" {
       return Template(templateString: "Hello World!", environment: environment, name: name)
