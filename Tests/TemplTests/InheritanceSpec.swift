@@ -6,7 +6,7 @@
 
 import PathKit
 import Spectre
-import Stencil
+import Templ
 import XCTest
 
 final class InheritanceTests: XCTestCase {

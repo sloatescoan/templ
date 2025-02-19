@@ -2,20 +2,29 @@
 import PackageDescription
 
 let package = Package(
-  name: "Stencil",
-  platforms: [.macOS(.v13)],
+  name: "Templ",
+  platforms: [.macOS(.v14)],
   products: [
-    .library(name: "Stencil", targets: ["Stencil"])
+    .library(name: "Templ", targets: ["Templ"]),
+    .library(name: "HummingbirdTempl", targets: ["HummingbirdTempl"])
   ],
   dependencies: [
-    .package(url: "https://github.com/kylef/Spectre.git", from: "0.10.1")
+    .package(url: "https://github.com/kylef/Spectre.git", from: "0.10.1"),
+    .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0")
   ],
   targets: [
     .target(
-      name: "Stencil"
+      name: "Templ"
     ),
-    .testTarget(name: "StencilTests", dependencies: [
-      "Stencil",
+    .target(
+      name: "HummingbirdTempl",
+      dependencies: [
+        "Templ",
+        .product(name: "Hummingbird", package: "hummingbird")
+      ]
+    ),
+    .testTarget(name: "TemplTests", dependencies: [
+      "Templ",
       "Spectre"
     ])
   ],

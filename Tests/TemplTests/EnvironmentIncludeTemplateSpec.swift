@@ -6,7 +6,7 @@
 
 import PathKit
 import Spectre
-@testable import Stencil
+@testable import Templ
 import XCTest
 
 final class EnvironmentIncludeTemplateTests: XCTestCase {

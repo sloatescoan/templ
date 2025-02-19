@@ -5,7 +5,7 @@
 //
 
 import Spectre
-import Stencil
+import Templ
 import XCTest
 
 final class TrimBehaviourTests: XCTestCase {

@@ -5,10 +5,10 @@
 //
 
 import Spectre
-import Stencil
+import Templ
 import XCTest
 
-final class StencilTests: XCTestCase {
+final class TemplTests: XCTestCase {
   private lazy var environment: Environment = {
     let exampleExtension = Extension()
     exampleExtension.registerSimpleTag("simpletag") { _ in
@@ -20,7 +20,7 @@ final class StencilTests: XCTestCase {
     return Environment(extensions: [exampleExtension])
   }()
 
-  func testStencil() {
+  func testTempl() {
     it("can render the README example") {
       let templateString = """
         There are {{ articles.count }} articles.

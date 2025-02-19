@@ -5,7 +5,7 @@
 //
 
 import Spectre
-@testable import Stencil
+@testable import Templ
 import XCTest
 
 final class TemplateTests: XCTestCase {
