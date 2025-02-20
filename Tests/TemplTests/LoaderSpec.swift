@@ -10,7 +10,7 @@ import XCTest
 
 final class TemplateLoaderTests: XCTestCase {
   func testFileSystemLoader() {
-    let path = (#file as String) + ".." + "fixtures"
+    let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(components: "fixtures").path
     let loader = FileSystemLoader(paths: [path])
     let environment = Environment(loader: loader)
 
