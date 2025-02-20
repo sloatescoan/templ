@@ -139,7 +139,7 @@ final class LexerTests: XCTestCase {
   }
 
   func testPerformance() throws {
-    let path = (#file as String) + ".." + "fixtures" + "huge.html"
+    let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(components: "fixtures/huge.html").path
     let content: String = try String(contentsOf: URL(filePath: path))
 
     measure {

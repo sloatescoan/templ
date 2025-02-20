@@ -9,7 +9,7 @@ import Spectre
 import XCTest
 
 final class IncludeTests: XCTestCase {
-  private let path = (#file as String) + ".." + "fixtures"
+  private let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(components: "fixtures").path
   private lazy var loader = FileSystemLoader(paths: [path])
   private lazy var environment = Environment(loader: loader)
 

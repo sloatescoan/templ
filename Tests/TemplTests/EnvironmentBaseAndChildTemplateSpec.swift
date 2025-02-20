@@ -16,7 +16,8 @@ final class EnvironmentBaseAndChildTemplateTests: XCTestCase {
   override func setUp() {
     super.setUp()
 
-    let path = (#file as String) + ".." + "fixtures"
+    let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(components: "fixtures").path
+
     let loader = FileSystemLoader(paths: [path])
     environment = Environment(loader: loader)
     childTemplate = ""
