@@ -233,9 +233,9 @@ extension Dictionary: Normalizable {
 
     for (key, value) in self {
       if let key = key as? String {
-        dictionary[key] = Stencil.normalize(value)
+        dictionary[key] = Templ.normalize(value)
       } else if let key = key as? CustomStringConvertible {
-        dictionary[key.description] = Stencil.normalize(value)
+        dictionary[key.description] = Templ.normalize(value)
       }
     }
 
