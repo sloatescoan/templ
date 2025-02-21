@@ -7,9 +7,12 @@
 import Spectre
 @testable import Templ
 import XCTest
+import Testing
 
-final class LexerTests: XCTestCase {
-  func testText() throws {
+@Suite
+struct LexerTests {
+
+  @Test func testText() throws {
     let lexer = Lexer(templateString: "Hello World")
     let tokens = lexer.tokenize()
 
@@ -17,7 +20,7 @@ final class LexerTests: XCTestCase {
     try expect(tokens.first) == .text(value: "Hello World", at: makeSourceMap("Hello World", for: lexer))
   }
 
-  func testComment() throws {
+  @Test func testComment() throws {
     let lexer = Lexer(templateString: "{# Comment #}")
     let tokens = lexer.tokenize()
 
@@ -25,7 +28,7 @@ final class LexerTests: XCTestCase {
     try expect(tokens.first) == .comment(value: "Comment", at: makeSourceMap("Comment", for: lexer))
   }
 
-  func testVariable() throws {
+  @Test func testVariable() throws {
     let lexer = Lexer(templateString: "{{ Variable }}")
     let tokens = lexer.tokenize()
 
@@ -33,7 +36,7 @@ final class LexerTests: XCTestCase {
     try expect(tokens.first) == .variable(value: "Variable", at: makeSourceMap("Variable", for: lexer))
   }
 
-  func testTokenWithoutSpaces() throws {
+  @Test func testTokenWithoutSpaces() throws {
     let lexer = Lexer(templateString: "{{Variable}}")
     let tokens = lexer.tokenize()
 
@@ -41,7 +44,7 @@ final class LexerTests: XCTestCase {
     try expect(tokens.first) == .variable(value: "Variable", at: makeSourceMap("Variable", for: lexer))
   }
 
-  func testUnclosedTag() throws {
+  @Test func testUnclosedTag() throws {
     let templateString = "{{ thing"
     let lexer = Lexer(templateString: templateString)
     let tokens = lexer.tokenize()
@@ -50,7 +53,7 @@ final class LexerTests: XCTestCase {
     try expect(tokens.first) == .text(value: "", at: makeSourceMap("{{ thing", for: lexer))
   }
 
-  func testContentMixture() throws {
+  @Test func testContentMixture() throws {
     let templateString = "My name is {{ myname }}."
     let lexer = Lexer(templateString: templateString)
     let tokens = lexer.tokenize()
@@ -61,7 +64,7 @@ final class LexerTests: XCTestCase {
     try expect(tokens[2]) == .text(value: ".", at: makeSourceMap(".", for: lexer))
   }
 
-  func testVariablesWithoutBeingGreedy() throws {
+  @Test func testVariablesWithoutBeingGreedy() throws {
     let templateString = "{{ thing }}{{ name }}"
     let lexer = Lexer(templateString: templateString)
     let tokens = lexer.tokenize()
@@ -71,22 +74,22 @@ final class LexerTests: XCTestCase {
     try expect(tokens[1]) == .variable(value: "name", at: makeSourceMap("name", for: lexer))
   }
 
-  func testUnclosedBlock() throws {
+  @Test func testUnclosedBlock() throws {
     let lexer = Lexer(templateString: "{%}")
     _ = lexer.tokenize()
   }
 
-  func testTokenizeIncorrectSyntaxWithoutCrashing() throws {
+  @Test func testTokenizeIncorrectSyntaxWithoutCrashing() throws {
     let lexer = Lexer(templateString: "func some() {{% if %}")
     _ = lexer.tokenize()
   }
 
-  func testEmptyVariable() throws {
+  @Test func testEmptyVariable() throws {
     let lexer = Lexer(templateString: "{{}}")
     _ = lexer.tokenize()
   }
 
-  func testNewlines() throws {
+  @Test func testNewlines() throws {
     // swiftlint:disable indentation_width
     let templateString = """
       My name is {%
@@ -110,7 +113,7 @@ final class LexerTests: XCTestCase {
     try expect(tokens[4]) == .text(value: ".", at: makeSourceMap(".", for: lexer))
   }
 
-  func testTrimSymbols() throws {
+  @Test func testTrimSymbols() throws {
     let fBlock = "if hello"
     let sBlock = "ta da"
     let lexer = Lexer(templateString: "{%+ \(fBlock) -%}{% \(sBlock) -%}")
@@ -125,7 +128,7 @@ final class LexerTests: XCTestCase {
     try expect(tokens[1]) == .block(value: sBlock, at: makeSourceMap(sBlock, for: lexer), whitespace: behaviours.1)
   }
 
-  func testEscapeSequence() throws {
+  @Test func testEscapeSequence() throws {
     let templateString = "class Some {{ '{' }}{% if true %}{{ stuff }}{% endif %}"
     let lexer = Lexer(templateString: templateString)
     let tokens = lexer.tokenize()
@@ -138,17 +141,18 @@ final class LexerTests: XCTestCase {
     try expect(tokens[4]) == .block(value: "endif", at: makeSourceMap("endif", for: lexer))
   }
 
-  func testPerformance() throws {
-    let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(components: "fixtures/huge.html").path
-    let content: String = try String(contentsOf: URL(filePath: path))
+  // measure from XCTestCase has no Swift Testing equivalent
+  // @Test func testPerformance() throws {
+  //   let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(components: "fixtures/huge.html").path
+  //   let content: String = try String(contentsOf: URL(filePath: path))
 
-    measure {
-      let lexer = Lexer(templateString: content)
-      _ = lexer.tokenize()
-    }
-  }
+  //   measure {
+  //     let lexer = Lexer(templateString: content)
+  //     _ = lexer.tokenize()
+  //   }
+  // }
 
-  func testCombiningDiaeresis() throws {
+  @Test func testCombiningDiaeresis() throws {
     // the symbol "ü" in the `templateString` is unusually encoded as 0x75 0xCC 0x88 (LATIN SMALL LETTER U + COMBINING
     // DIAERESIS) instead of 0xC3 0xBC (LATIN SMALL LETTER U WITH DIAERESIS)
     let templateString = "ü\n{% if test %}ü{% endif %}\n{% if ü %}ü{% endif %}\n"
