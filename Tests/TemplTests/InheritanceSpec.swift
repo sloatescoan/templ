@@ -9,7 +9,7 @@ import Templ
 import XCTest
 
 final class InheritanceTests: XCTestCase {
-  private let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(components: "fixtures").path
+  private let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(path: "fixtures").path
   private lazy var loader = FileSystemLoader(paths: [path])
   private lazy var environment = Environment(loader: loader)
 

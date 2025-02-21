@@ -52,30 +52,38 @@ public final class FileSystemLoader: Loader, CustomStringConvertible {
   }
 
   public func loadTemplate(name: String, environment: Environment) throws -> Template {
-    for path in paths {
-      let templatePath = path.appending(path: name)
+    do {
+      for path in paths {
+        let templatePath = try path.safeAppending(path: name)
 
-      if try !templatePath.checkResourceIsReachable() {
-        continue
+        if try !templatePath.checkResourceIsReachable() {
+          continue
+        }
+
+        let content = try String(contentsOf: templatePath, encoding: .utf8)
+        return environment.templateClass.init(templateString: content, environment: environment, name: name)
       }
-
-      let content = try String(contentsOf: templatePath, encoding: .utf8)
-      return environment.templateClass.init(templateString: content, environment: environment, name: name)
+    } catch {
+      throw TemplateDoesNotExist(templateNames: [name], loader: self)
     }
 
     throw TemplateDoesNotExist(templateNames: [name], loader: self)
   }
 
   public func loadTemplate(names: [String], environment: Environment) throws -> Template {
-    for path in paths {
-      for templateName in names {
-        let templatePath = path.appending(path: templateName)
+    do {
+      for path in paths {
+        for templateName in names {
+          let templatePath = try path.safeAppending(path: templateName)
 
-        if try templatePath.checkResourceIsReachable() {
-          let content: String = try String(contentsOf: templatePath, encoding: .utf8)
-          return environment.templateClass.init(templateString: content, environment: environment, name: templateName)
+          if try templatePath.checkResourceIsReachable() {
+            let content: String = try String(contentsOf: templatePath, encoding: .utf8)
+            return environment.templateClass.init(templateString: content, environment: environment, name: templateName)
+          }
         }
       }
+    } catch {
+      throw TemplateDoesNotExist(templateNames: names, loader: self)
     }
 
     throw TemplateDoesNotExist(templateNames: names, loader: self)
@@ -105,5 +113,31 @@ public final class DictionaryLoader: Loader {
     }
 
     throw TemplateDoesNotExist(templateNames: names, loader: self)
+  }
+}
+
+extension URL {
+  func safeAppending(path: String) throws -> URL {
+    let newURL = self.appending(path: path).standardized
+
+    if !newURL.path().hasPrefix(self.path()) {
+      throw SuspiciousFileOperation(basePath: self.path(), path: newURL.path())
+    }
+
+    return newURL
+  }
+}
+
+final class SuspiciousFileOperation: Error {
+  let basePath: String
+  let path: String
+
+  init(basePath: String, path: String) {
+    self.basePath = basePath
+    self.path = path
+  }
+
+  var description: String {
+    "Path `\(path)` is located outside of base path `\(basePath)`"
   }
 }

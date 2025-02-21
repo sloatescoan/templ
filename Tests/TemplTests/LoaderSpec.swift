@@ -11,7 +11,7 @@ import Testing
 
 @Suite struct TemplateLoaderTests {
   @Test func testFileSystemLoader() throws {
-    let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(components: "fixtures").path
+    let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(path: "fixtures").path
     let loader = FileSystemLoader(paths: [path])
     let environment = Environment(loader: loader)
 

@@ -143,7 +143,7 @@ struct LexerTests {
 
   // measure from XCTestCase has no Swift Testing equivalent
   // @Test func testPerformance() throws {
-  //   let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(components: "fixtures/huge.html").path
+  //   let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(path: "fixtures/huge.html").path
   //   let content: String = try String(contentsOf: URL(filePath: path))
 
   //   measure {

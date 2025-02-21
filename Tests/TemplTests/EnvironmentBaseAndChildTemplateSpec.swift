@@ -16,7 +16,7 @@ final class EnvironmentBaseAndChildTemplateTests: XCTestCase {
   override func setUp() {
     super.setUp()
 
-    let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(components: "fixtures").path
+    let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(path: "fixtures").path
 
     let loader = FileSystemLoader(paths: [path])
     environment = Environment(loader: loader)
@@ -45,7 +45,7 @@ final class EnvironmentBaseAndChildTemplateTests: XCTestCase {
       throw TemplateSyntaxError("filter error")
     }
 
-    let environment = Environment(loader: environment.loader, extensions: [filterExtension])
+    environment = Environment(loader: environment.loader, extensions: [filterExtension])
 
     childTemplate = try environment.loadTemplate(name: "invalid-child-super.html")
     baseTemplate = try environment.loadTemplate(name: "invalid-base.html")
@@ -80,7 +80,7 @@ final class EnvironmentBaseAndChildTemplateTests: XCTestCase {
       throw TemplateSyntaxError("filter error")
     }
 
-    let environment = Environment(loader: environment.loader, extensions: [filterExtension])
+    environment = Environment(loader: environment.loader, extensions: [filterExtension])
 
     childTemplate = Template(
       templateString: """
