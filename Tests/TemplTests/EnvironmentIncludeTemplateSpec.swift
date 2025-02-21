@@ -16,7 +16,7 @@ final class EnvironmentIncludeTemplateTests: XCTestCase {
   override func setUp() {
     super.setUp()
 
-    let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(components: "fixtures").path
+    let path = URL(fileURLWithPath: #filePath).deletingLastPathComponent().appending(path: "fixtures").path
     let loader = FileSystemLoader(paths: [path])
     environment = Environment(loader: loader)
     template = ""
@@ -46,7 +46,7 @@ final class EnvironmentIncludeTemplateTests: XCTestCase {
       throw TemplateSyntaxError("filter error")
     }
 
-    let environment = Environment(loader: environment.loader, extensions: [filterExtension])
+    environment = Environment(loader: environment.loader, extensions: [filterExtension])
 
     template = Template(templateString: """
       {% include "invalid-include.html" %}
