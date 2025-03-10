@@ -3,10 +3,10 @@ import Templ
 
 public struct TemplResponse: ResponseGenerator {
     let template: String?
-    let templateContext: [String: Any]?
-    let status: HTTPResponse.Status
-    let headers: HTTPFields
-    let body: ResponseBody?
+    public var templateContext: [String: Any]?
+    public var status: HTTPResponse.Status
+    public var headers: HTTPFields
+    public var body: ResponseBody?
 
     public init(
         template: String,
@@ -41,8 +41,6 @@ public struct TemplResponse: ResponseGenerator {
             }
 
             templateContext["request"] = request
-            templateContext["foo"] = Foo()
-
 
             let environment: Templ.Environment
 
@@ -75,12 +73,9 @@ public struct TemplResponse: ResponseGenerator {
 
         return Response(status: status, headers: headers, body: body)
     }
-}
 
-struct Foo {
-    var bar: Bar = Bar()
-}
-
-struct Bar {
-    var baz = "qux"
+    // from Hummingbird's Response
+    public mutating func setCookie(_ cookie: Cookie) {
+        self.headers[values: .setCookie].append(cookie.description)
+    }
 }
