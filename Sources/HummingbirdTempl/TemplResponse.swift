@@ -74,6 +74,14 @@ public struct TemplResponse: ResponseGenerator {
         return Response(status: status, headers: headers, body: body)
     }
 
+    public init(redirect: String, reason: String = "Redirecting.", status: HTTPResponse.Status = .seeOther) {
+        self.init(
+            status: status,
+            headers: [.location: redirect],
+            body: .init(byteBuffer: .init(string: reason))
+        )
+    }
+
     // from Hummingbird's Response
     public mutating func setCookie(_ cookie: Cookie) {
         self.headers[values: .setCookie].append(cookie.description)
