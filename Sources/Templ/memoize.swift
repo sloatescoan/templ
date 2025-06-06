@@ -2,7 +2,7 @@ import Foundation
 
 func memoize<Input: Hashable, Output>(_ function: @escaping (Input) -> Output) -> (Input) -> Output {
     var storage = [Input: Output]()
-    let queue = DispatchQueue(label: "memoization.queue")
+    let queue = DispatchQueue(label: "memoize.queue")
 
     return { input in
         return queue.sync {
